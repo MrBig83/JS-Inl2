@@ -45,7 +45,9 @@ btn.addEventListener("click", (e) => {
         console.log("Felaktigt användarnamn eller lösenord");
         userIsLoggedIn = false;   
         console.log(userIsLoggedIn);
-        //SKAPA P med texten Felaktigt användarnamn eller lösenord -------------------------------------------------------------------------------//
+        p = document.getElementById("badCred");
+        p.textContent = ("Bad credidentials. Please try again!");
+        
     }
     console.log(userIsLoggedIn);
 
@@ -65,7 +67,7 @@ if (userIsLoggedIn === true){
 }
 showLogin()
 });
-// ----- CREATE ACCOUNT ----- // JOBBA PÅ DENNA ---------------------------------------------------------------------------------------------------//
+// ----- CREATE ACCOUNT ----- // JOBBA PÅ DENNA ------------------------ LOCAL STORAGE-----------------------------------------//
 const createAccountBtn = document.querySelector("#createAccountBtn");
 createAccountBtn.addEventListener("click", (e) => {
     e.preventDefault()

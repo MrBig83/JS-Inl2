@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JS - Inlämningsuppgift 2</title>
-    <script src="script.js" defer></script> 
-    <!-- <script src="script_lek.js" defer></script> -->
+    <!-- <script src="script.js" defer></script>  -->
+    <script src="script_lek.js" defer></script>
 </head>
 <body>
     <header>
@@ -16,11 +16,12 @@
     </header>
 
     <main>
+        <p id="pWelcome">Log in here: </p>
         <div id="loginForm">
-            <p>Log in here: </p>
+            
             <form action="#" id="loginForm">
-                <input type="text" name="inputUsername" id="inputUsername" placeholder="Usename" style="margin-top:0.0rem">
-                <input type="password" name="inputPassword" id="inputPassword" placeholder="Password"  style="margin-top:0.5rem"><br>
+                <input type="text" name="inputUsername" id="inputUsername" placeholder="Username" style="margin-top:0.0rem">
+                <input type="text" name="inputPassword" id="inputPassword" placeholder="Password"  style="margin-top:0.5rem"><br>
                 <p id="badCred"></p>
                 <button id="button" style="margin-top:0.5rem">Log in</button>
                 <button id="createAccountBtn" style="display:inline; margin-top: 2rem";>Create Account</button>

@@ -1,78 +1,103 @@
-let nameInput ="",
-    pwdInput = "",
+let pwdInput = "",
     userExists,
     userIsLoggedIn,
-    loggedInUser;
-
-loggedInUser = localStorage.getItem("loggedInUser", );
-console.log(loggedInUser);
-if (loggedInUser != ""){
-  //Användaren är inloggad ========= GOTO - finns det? =======
-  nameInput = loggedInUser; 
-} else {
-    //Användaren är INTE inloggad
-}
+    loggedInUser,
+    hittat,
+    nameInput;
+checkIsUserLoggedIn();
 
 
+//buildLoginForm();
+/*
+getCredidentials();
+checkUserExist();
+login();
+createWelcomePage();
+showLogout();
+logOut();*/
 
 
-const btn = document.querySelector("#button");
-btn.addEventListener("click", (e) => {
-    e.preventDefault();
-    nameInput = document.querySelector("#inputUsername").value;
-    pwdInput = document.querySelector("#inputPassword").value;
-    //e.preventDefault(); Oklart behov i denna applikation.
-    //console.log("Button clicked!");
 
+function checkIsUserLoggedIn(){
+    loggedInUser = localStorage.getItem("loggedInUser", );
+    console.log(loggedInUser);
+    if (loggedInUser != ""){
+        console.log("Inloggad");
+        //Användaren är inloggad ========= 
+    nameInput = loggedInUser; 
+        showLogout();
+    } else {
+        //Användaren är INTE inloggad
+        console.log("INTE inloggad");
+        buildLoginForm();
+}};
+
+function buildLoginForm(){
+    let p = document.getElementById("pWelcome");
+    p.textContent = "Välkommen! Logga in nedan";
+
+    let loginForm = document.getElementById("loginForm");
+    loginForm.style.display="block";
+};
+
+function getCredidentials(){
+    const btn = document.querySelector("#button");
+    btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        nameInput = document.querySelector("#inputUsername").value;
+        pwdInput = document.querySelector("#inputPassword").value;
+        console.log(nameInput);
+        checkUserExist()
+    })
+};
+
+function checkUserExist(){
     // ----- Does the user exist? ----- //
-    let hittat = localStorage.getItem(nameInput);
+    hittat = localStorage.getItem(nameInput);
     console.log(hittat);
-    if(hittat !== null){
+    if(hittat != null){
       console.log("Användaren finns");
       userExists = true;
     } else {
         console.log("Användaren finns inte");
         userExists = false;
     }
-    
+};
+
+
+function login(){
     if(hittat === pwdInput){
+        loggedInUser = nameInput;
+        userIsLoggedIn = true; //Kanske onödig när vi har loggedInUser? 
+        console.log("Inloggningen lyckades");
+        createWelcomePage();
+} else {
+    let badCred = document.getElementById("badCred")
+    badCred.textContent = "Användarnamn eller lösenord är fel";
+}};
 
-            userIsLoggedIn = true;
-            console.log("Inloggningen lyckades");
+function createWelcomePage(){
+    let p = document.getElementById("pWelcome");
+    p.textContent = `Välkommen, ${nameInput}`;
 
-            let p = document.getElementById("pWelcome");
-            p.textContent = `Välkommen, ${nameInput}`;
+    let loginForm = document.getElementById("loginForm");
+    loginForm.style.display="none";
+    
 
-            let loginForm = document.getElementById("loginForm");
-            loginForm.style.display="none";
-            
-            let logoutBtn = document.getElementById("logoutBtn")
-            logoutBtn.style.display = "block";  
-            
-            localStorage.setItem("loggedInUser", nameInput);
+    
+    localStorage.setItem("loggedInUser", nameInput);
+};
+function showLogout(){
+    const logoutBtn = document.getElementById(".logoutBtn");
+    logoutBtn.style.display="block";
+    
+    
+};
+
+function logOut(){
+    logoutBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+    
+        localStorage.setItem("loggedInUser", "");
         
-
-    } else {
-
-        let badCred = document.getElementById("badCred")
-        badCred.textContent = "Användarnamn eller lösenord är fel";
-    }
-    /*
-    console.log(userExists);
-    console.log(nameInput);
-    console.log(pwdInput);
-    console.log(userIsLoggedIn);
-    */
-
-});
-
-if(userIsLoggedIn === true){
-
-}
-const logoutBtn = document.querySelector("#logoutBtn");
-logoutBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-
-    localStorage.setItem("loggedInUser", "");
-    location.reload();
-});
+})};

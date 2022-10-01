@@ -18,17 +18,19 @@
     </header>
 
     <main>
+        <div id="badCred"></div>
         <p id="pWelcome">Log in here: </p>
-        <div id="loginForm">
-                <input type="text" name="inputUsername" id="inputUsername" placeholder="Username" style="margin-top:0.0rem">
-                <input type="text" name="inputPassword" id="inputPassword" placeholder="Password"  style="margin-top:0.5rem"><br>
-                <div id="badCred"></div>
-                <button id="logInBtn" style="margin-top:0.5rem">Log in</button>
-                <button id="createAccountBtn" style="display:inline; margin-top: 2rem";>Create Account</button>
+        <div id="loginForm" style="display:none ;">
+            <input type="text" name="inputUsername" id="inputUsername" placeholder="Username" style="margin-top:0.0rem">
+            <input type="text" name="inputPassword" id="inputPassword" placeholder="Password"  style="margin-top:0.5rem"><br>
+            <div id="badCred"></div>
+            <button id="logInBtn" style="margin-top:0.5rem">Log in</button>
+            <button id="createAccountBtn" style="display:inline; margin-top: 2rem";>Create Account</button>
         </div>
-        <div id="createAccount" style="display:none ;">
+        <div id="createAccount" style="display:block ;">
             <input type="text" name="createUsername" id="createUsername" placeholder="New Username" style="margin-top:0.0rem">
             <input type="text" name="createPassword" id="createPassword" placeholder="New Password"  style="margin-top:0.5rem"><br>
+            
             <button id="btnCreateAccount" style="margin-top:0.5rem">Create Account</button>
             <button id="backBtn" style="margin-top:0.5rem">Return to login</button>
         </div>

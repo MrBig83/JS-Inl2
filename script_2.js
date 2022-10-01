@@ -1,56 +1,74 @@
 // ----- Set variables ----- //
-var inputUsername="",
+var inputUsername,
     inputPassword,
     logInBtn,
+    errorCode,
     userList,
-    user;
-    
+    tempUserList,
+    user,
+    defUserList,
+    btnCreateAccount;
+
+
+
+
+// ----- Init default users ----- //
+initDefaultUsers();
+// ----- Log in ----- //
+
+// ----- Create new account ----- //
 
 // ----- Fetch document-stuff ----- //
-inputUsername = document.querySelector("#inputUsername");
-inputPassword = document.querySelector("#inputPassword");
-
-
-// ----- Push new user ----- //
-logInBtn = document.querySelector("#logInBtn");
-logInBtn.addEventListener("click", (e) => {
-    e.preventDefault()
-
-    console.log(inputUsername.value);
-    console.log(inputPassword.value);
-    userList.push(new User(inputUsername.value, inputPassword.value));
-
-
-});
-
-// ----- Initialize login ----- //
-
-// ----- Check credidentials ----- //
-
-userList = [
-
-];
-const person1 = new User("Fredrik", "12345");
-userList.push(person1);
-
-function User(userName, password) {
-    this.userName = userName;
-    this.password = password;
+createUsername = document.querySelector("#createUsername");
+createPassword = document.querySelector("#createPassword");
+btnCreateAccount = document.querySelector("#btnCreateAccount"); 
+btnCreateAccount.addEventListener("click", (e) => {
+    e.preventDefault()   
+user ={
+    userName: createUsername.value,
+    password: createPassword.value
 }
-    
+let obj = userList.find(o => o.userName === createUsername.value);
+console.log(obj); //För felsökning
+if(obj != undefined){
+    felmeddelande("User exists")
+} else {
+    userList.push(user);
+    localStorage.setItem("users", JSON.stringify(userList));
+    userList = JSON.parse(localStorage.getItem("users", ));
+    felmeddelande();
+}});
 
+//let listKoll = localStorage.getItem("users",)
+//console.log(listKoll.length);
 
-console.log(userList)
-console.log(userList.length);
-
-
-
-//userList.push("userName: Test")
-/*
-for(let user of userList) {
-    console.log(user.userName);
+function felmeddelande(errorCode){
+    const p = document.getElementById("badCred");
+    p.style.display="block";
+    p.textContent = errorCode;
 };
-*/
 
-// program to append an object to an array
-
+// ----- FUNCTIONS ----- //
+function initDefaultUsers(){
+    defUserList = [
+        {
+            userName: "Fredrik",
+            password: "12345"
+        },
+        {
+            userName: "Martin",
+            password: "555"
+        }, 
+        {
+            userName: "Josefine",
+            password: "112233"
+        }, 
+    ];
+    tempUserList = (localStorage.getItem("users", ));
+    if(tempUserList == ""){
+        localStorage.setItem("users", JSON.stringify(defUserList)); //Ladda upp defUserList
+    }
+    tempUserList = JSON.parse(localStorage.getItem("users", )); //Ladda ner
+    userList = tempUserList;
+    };
+    console.log(userList);

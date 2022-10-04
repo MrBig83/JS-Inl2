@@ -1,219 +1,154 @@
-// ----- INIT VARIABLES ----- //
-let nameInput = "";
-let pwdInput = "";
-let username = "";
-let userpwd = "";
-let inputUsername = "";
-let inputPassword = "";
-let verify;
-let findpassword;
-let pwd;
-let userIs;
-let userIsLoggedIn;
-let p;
-let logo;
-let loggedInUser;
-
-let whoIs = localStorage.getItem(loggedInUser);
-console.log(whoIs);
-if(whoIs === "AAA"){
-    hideLogin();
-    welcomeText(whoIs);
-} else {
-    showLogin();
-}
-
-const btn = document.querySelector("#button");
-showLogin()
-// ----- LOGIN FUNCTION STARTS HERE ----- //
-
-btn.addEventListener("click", (e) => {
-    e.preventDefault()
-        nameInput = document.querySelector("#inputUsername").value;
-        pwdInput = document.querySelector("#inputPassword").value;
-
-// ----- Check if the user exists ----- //
-    theUserList = ["AAA", "12345", "BBB", "54321"];
-    let verify = (theUserList.indexOf(nameInput));
-    findpassword = (verify+1);
-    pwd = theUserList[findpassword];
+// ----- Set variables ----- //
+let inputUsername,
+    inputPassword,
+    logInBtn,
+    errorCode,
+    userList,
+    tempUserList,
+    user,
+    defUserList,
+    pWelcome,
+    loggedInUser,
+    loginForm,
+    logoutBtn,
+    errormsg,
+    btnCreateAccount;
     
-    if(theUserList.includes(nameInput))
-    {
-        console.log("Användaren finns");
-        userIs = true;
-    } else {
-        console.log("Användaren finns INTE");
-        userIs = false;
+    inputUsername = document.querySelector("#inputUsername");
+    inputPassword = document.querySelector("#inputPassword");
+    const pBadCred = document.getElementById("badCred");
+
+
+anyoneHome();
+initDefaultUsers();
+login();
+createAccount();
+
+// ----- FUNCTIONS BELOW THIS POINT ----- //
+function initDefaultUsers(){
+    defUserList = [
+        {
+            userName: "Fredrik",
+            password: "12345"
+        },
+        {
+            userName: "Martin",
+            password: "555"
+        }, 
+];
+    tempUserList = (localStorage.getItem("users", ));
+    if(tempUserList == undefined){
+        localStorage.setItem("users", JSON.stringify(defUserList)); //Ladda upp defUserList
     }
-    
-// ----- Login & verify in console ----- //
-    if(userIs === true && pwdInput === pwd)
-    {
-        console.log("Inloggad!")
-        userIsLoggedIn = true;
-        localStorage.setItem("loggedInUser", nameInput);
-    } else {
-        console.log("Felaktigt användarnamn eller lösenord");
-        userIsLoggedIn = false;   
-        console.log(userIsLoggedIn);
-        p = document.getElementById("badCred");
-        p.textContent = ("Bad credidentials. Please try again!");
-        
-    }
-    console.log(userIsLoggedIn);
-
-    if (userIsLoggedIn === true) {
-        hideLogin();
-        welcomeText();
-    }
-});
-// ----- LOG OUT ----- //
-
-console.log(userIsLoggedIn);
-const logoutBtn = document.querySelector("#logOut");
-logoutBtn.addEventListener("click", (e) => {
-    e.preventDefault()
-if (userIsLoggedIn === true){
-    userIsLoggedIn = false;
-    console.log(userIsLoggedIn);
-    showLogin();
-}});
-
-
-// ----- CREATE ACCOUNT ----- // JOBBA PÅ DENNA ------------------------ LOCAL STORAGE-----------------------------------------//
-const createAccountBtn = document.querySelector("#createAccountBtn");
-createAccountBtn.addEventListener("click", (e) => {
-    e.preventDefault()
-    showCreateAccount();
-
-});
-
-// ----- FUNCTIONS ----- //
-function hideLogin(){
-    
-    const form = document.getElementById("loginForm");
-    form.style.display = "none";
-    
-
-    const logout = document.getElementById("logoutBtn")
-    console.log(logout);
-    logout.style.display="inline";
-    console.log(userIsLoggedIn);
+    tempUserList = JSON.parse(localStorage.getItem("users", )); //Ladda ner
+    userList = tempUserList;
 };
-function welcomeText(nameInput){
-    logo = document.querySelector("h1");
-    logo.style.color = ("green");
-    p = document.querySelector("#pWelcome");
-    p.textContent = ("Välkommen, " + nameInput + "!");
-}
-
-function showLogin(){
-    const createAccount = document.getElementById("createAccount");
-    createAccount.style.display = "none";
-
-    const form = document.querySelector("form");
-    form.style.display = "block";
-    form.inputUsername.value = "";
-    form.inputPassword.value = "";
-    p = document.querySelector("p");
-    p.textContent = ("Log in hfffere:");
-    logo = document.querySelector("h1");
-    logo.style.color = ("black");
-
-    const logout = document.getElementById("logoutBtn")
-    
-    logout.style.display="none";
-
-
-    console.log(logout);
-    
+function login(){
+    logInBtn = document.querySelector("#logInBtn"); 
+    logInBtn.addEventListener("click", function() {
+        let obj = userList.find(o => o.userName === inputUsername.value)
+            if(obj != undefined){
+                for (let x of userList) {
+                if(inputUsername.value === x.userName && inputPassword.value === x.password){
+                    logInUser(inputUsername.value);
+                return  
+                } 
+                }; 
+                felmeddelande("Felaktigt användarnamn eller lösenord. Försök igen.");
+            } else {
+                felmeddelande("Användarnamnet finns inte. Försök igen.")
+            }
+    });
+    createAccountBtn = document.querySelector("#createAccountBtn");
+    createAccountBtn.addEventListener("click", function() {
+        showCreateAccount()
+    })
 };
-
-
-
-
+function showLogout(){
+    logoutBtn = document.querySelector("#logoutBtn");
+    loginForm = document.querySelector("#loginForm");
+    logoutBtn.style.display="block";
+    logoutBtn.addEventListener("click", function() {
+            localStorage.removeItem("loggedInUser");
+            loginForm.style.display="block";
+            logoutBtn.style.display="none";
+            pWelcome.innerText="Välkommen! Logga in nedan:"
+    })
+    felmeddelande();
+}
 function showCreateAccount(){
-    hideLogin()
-    const createAccount = document.getElementById("createAccount");
-    createAccount.style.display = "block";
-    logo = document.querySelector("h1");
-    logo.style.color = ("yellow");
-    logo.style.textShadow = ("3px 3px 3px black");
-    p = document.querySelector("p");
-    p.textContent = ("Kul att du vill skapa ett konto! Fyll i formuläret nedan, så är du snart igång!");
+    loginForm = document.querySelector("#loginForm")
+    loginForm.style.display="none";
+    createAccount = document.querySelector("#createAccount")
+    createAccount.style.display="block";
+    pWelcome = document.querySelector("#pWelcome");
+    pWelcome.innerText = "Kul att du vill joina! Du kan skapa ett konto nedan: "
+    felmeddelande();
+} 
+function anyoneHome(){
+    if(localStorage.getItem("loggedInUser")){
+        loggedInUser = localStorage.getItem("loggedInUser")
+        pWelcome = document.querySelector("#pWelcome");
+        pWelcome.innerText=("Välkommen tillbaka, " + loggedInUser +"!");
+        showLogout();
+    } else {
+        loginForm = document.getElementById("loginForm");
+        loginForm.style.display="block";
+        inputUsername.value="";
+        inputPassword.value="";
+    }
+    felmeddelande();
+}
+function logInUser(username){
+    loginForm = document.getElementById("loginForm");
+    loginForm.style.display="none";
+    pBadCred.style.display="block";
+    pWelcome = document.getElementById("pWelcome");
+    pWelcome.innerText=("Välkommen, " + username +"!");
+    localStorage.setItem("loggedInUser", username);
+    inputUsername.value="";
+    inputPassword.value="";
+    showLogout();
+    felmeddelande();
+}
+function createAccount(){
+    createUsername = document.querySelector("#createUsername");
+    createPassword = document.querySelector("#createPassword");
+    backBtn = document.querySelector("#backBtn");
+    btnCreateAccount = document.querySelector("#btnCreateAccount"); 
+    btnCreateAccount.addEventListener("click", function() {
+        user ={
+            userName: createUsername.value,
+            password: createPassword.value
+            }
+        let obj = userList.find(o => o.userName === createUsername.value);
+        if(obj != undefined){
+            felmeddelande("Användarnamnet är upptaget. Prova med ett annat användarnamn");
+        } else {
+            userList.push(user);
+            localStorage.setItem("users", JSON.stringify(userList));
+            userList = JSON.parse(localStorage.getItem("users", ));
+            felmeddelande();
+            felmeddelande("Kontot " + createUsername.value + " skapades.");
+            createUsername.value=("");
+            createPassword.value=("");
+            }
+    });
+    backBtn.addEventListener("click", showLogin);
 
-    //const rtrnToLogin = document.getElementById("backBtn");
-    //rtrnToLogin.style.display="block";
-    let createUsername = document.querySelector("#createUsername");
-    let createPassword = document.getElementById("createPassword");
-
-    let btnCreateAccount = document.getElementById("btnCreateAccount");
-    btnCreateAccount.addEventListener("click", (e) => {
-    e.preventDefault()
-    console.log("Knapp för create account");
-    console.log(createUsername.value);
-    console.log(createPassword.value);
-    localStorage.setItem(createUsername.value, createPassword.value);
-
-    //showCreateAccount();
-
-});
-
-    const logout = document.getElementById("logoutBtn");
-    logout.style.display="none";
-    
-    //Buttons//
-    
+};
+function showLogin(){
+    createAccount = document.querySelector("#createAccount")
+    createAccount.style.display="none";
+    loginForm = document.querySelector("#loginForm")
+    loginForm.style.display="block";
+    pWelcome.innerText="Välkommen! Logga in nedan:"
+    inputUsername.value="";
+    inputPassword.value="";
+    felmeddelande();
 }
 
-const usersArr = [
-    {
-        userName: "Fredrik",
-        password: "12345"
-    },
-    {
-        userName: "Martin",
-        password: "12345"
-    },
-    {
-        userName: "Malin",
-        password: "12345"
-    }
-]
-localStorage.setItem("users", JSON.stringify(usersArr))
-var storedNames = JSON.parse(localStorage.getItem("users"));
-console.log(storedNames);
-usersArr.push({username: "Evelina", password: "12345"});
-console.log(usersArr);
-localStorage.setItem("users", JSON.stringify(usersArr))
-
-storedNames = JSON.parse(localStorage.getItem("users"));
-console.log(storedNames[3].userName);
-
-
-//fruits.push("mangos"); //Lägg till item i slutet
-/*
-var names = [];
-names[0] = prompt("New member name?");
-localStorage.setItem("names", JSON.stringify(names));
-
-//...
-var storedNames = JSON.parse(localStorage.getItem("names"));
-console.log(storedNames);
-*/
-// Array med objekt
-// Varje objekt är en användare
-// anvnamn och lösenord
-
-/*
-console.log(myArray[1]);
-
-
-localStorage.setItem("users", myArray);
-
-
-let myAnswers = localStorage.getItem("users")
-console.log(myAnswers[0]);
-*/
-//JSON.stringify(car)
+function felmeddelande(errorCode){
+    pBadCred.style.display="block";
+    pBadCred.textContent = errorCode;
+};
